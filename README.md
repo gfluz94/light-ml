@@ -21,12 +21,14 @@ Then we can build the dataset and subsequently perform train-test split:
 data = load_iris()
 X = pd.DataFrame(data["data"], columns=data["feature_names"])
 y = pd.Series(data["target"], name="target")
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2, random_state=99)
 ```
 
 Finally, we can import and instantiate our feature selection object:  
 
 ```python
-from light_ml.preprocessor import BorutaFeatureSelector
+from light_ml.preprocessors import BorutaFeatureSelector
 
 bfs = BorutaFeatureSelector(trials=50, percentile=0.01, keep_only_tail=False)
 ```
@@ -49,7 +51,7 @@ bfs.summary()
 **************************************************
 
 &gt;&gt; Features to drop (&lt;= 17):
-	* sepal length (cm)    [hits: 4]
+	* sepal length (cm)    [hits: 6]
 	* sepal width (cm)     [hits: 0]
 
 &gt;&gt; Features to tentatively keep (17 &lt; hits &lt; 33):
@@ -77,6 +79,9 @@ bfs.selected_features
 ```python
 bfs.show_decision_regions(show_features=True)
 ```
+
+![png](./utils/boruta_viz.png)
+
 
 + Transforming our dataset:  
 
